@@ -15,6 +15,11 @@ const domoSchema = new mongoose.Schema({
     min: 0,
     required: true,
   },
+  desc: {
+    type: String,
+    required: false,
+    trim: true,
+  },
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
@@ -29,6 +34,8 @@ const domoSchema = new mongoose.Schema({
 domoSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   age: doc.age,
+  desc: doc.desc,
+  id: doc.id, // need this to delete it later
 });
 
 const DomoModel = mongoose.model('Domo', domoSchema);

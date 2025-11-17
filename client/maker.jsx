@@ -9,13 +9,14 @@ const handleDomo = (e, onDomoAdded) => {
 
     const name = e.target.querySelector('#domoName').value;
     const age = e.target.querySelector('#domoAge').value;
+    const desc = e.target.querySelector('#domoDesc').value;
 
     if(!name || !age) {
-        helper.handleError('All fields are required');
+        helper.handleError('Both name and age are required!');
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, age}, onDomoAdded);
+    helper.sendPost(e.target.action, {name, age, desc}, onDomoAdded);
     return false;
 };
 
@@ -28,11 +29,17 @@ const DomoForm = (props) => {
             method="POST"
             className="domoForm"
         >
-            <label htmlFor="name">Name: </label>
-            <input id="domoName" type="text" name="name" placeholder="Domo Name" />
-            <label htmlFor="age">Age: </label>
-            <input id="domoAge" type="number" min="0" name="age"/>
-            <input className="makeDomoSubmit" type="submit" value="Make Domo" />
+            <div>
+                <label htmlFor="name">Name: </label>
+                <input id="domoName" type="text" name="name" placeholder="Domo Name" />
+                <label htmlFor="age">Age: </label>
+                <input id="domoAge" type="number" min="0" name="age"/>
+                <input className="makeDomoSubmit" type="submit" value="Make Domo" />
+            </div>
+            <div>
+                <label htmlFor="desc">Description: </label>
+                <textarea id="domoDesc" name="desc" placeholder="Domo Description" rows="3"/>
+            </div>
         </form>
     );
 };
@@ -59,10 +66,16 @@ const DomoList = (props) => {
 
     const domoNodes = domos.map(domo => {
         return(
-            <div key={domo.id} className="domo">
+            <div key={domo._id} className="domo">
+                <button 
+                    className="deleteButton"
+                    onClick={() => helper.sendDelete('/unmaker', { id: domo._id }, props.triggerReload)}
+                >X</button>
+
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
                 <h3 className="domoName">Name: {domo.name}</h3>
                 <h3 className="domoAge">Age: {domo.age}</h3>
+                <h3 className="domoDesc">Description: {domo.desc}</h3>
             </div>
         );
     });
